@@ -1,27 +1,13 @@
-#+TITLE: File Manager Outline
+#+TITLE: Pynav
 #+DATE: 4/16/2020
 
 * Introduction and Purpose
-The purpose of this application is create a console based file manager application which allows for the in-terminal navigate of my own linux machine. The application should be fast, intuitive, portable, and feature rich. The program will feature python code leveraging builtin packages like ncurses and os.
-* Features
-** Minimum functionality:
-1. Start program in a specified dir or in $HOME (or some other default)
-2. View the current directory in a screen
-3. On highlighting a file if it is:
-   a. directory: show the contents of that dir
-   b. file: show metadata (name, file type, size, etc.) in a well formatted manner
-4. On some key press (maybe enter?) take appropriate actions related to the highlighted object like
-   + Navigating into the highlighted directory
-   + opening the highlighted file using a relevant program (like a text editor for text programs... stuff like that)
-5. basic file manipulation operations:
-   + copying file(s) to a new location
-   + moving file(s)
-   + deleting file(s)
-6. Show files and directories differently
-7. Allowing user specified sorting of items (like by size or by alphabet or by type)
+The purpose of this application is create a console based file manager application which allows for the in-terminal navigation of a nix based machine. 
+The program features python code leveraging builtin packages like ncurses and os. The initial idea for this was inspired by applications like lfm so a huge thank you to the people who created them!
+
 * Roadmap
+this is where ill keep track of work that i've done on features that I'd like to have in the application
 ** [0/3] Crawling
 + [ ] Get all files and folders in working dir
 + [ ] Add them to a dict or list or class with relevant meta-data attached
-+ [ ] Print them to terminal and make them high-light-able (curse)
-+ [ ] 
++ [ ] Print them to terminal and make them high-light-abable through navigation gestures like key up and down 
