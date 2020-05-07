@@ -6,7 +6,7 @@ The purpose of this application is create a console based file manager applicati
 The program features python code leveraging builtin packages like ncurses and os. The initial idea for this was inspired by applications like lfm so a huge thank you to the people who created them!
 
 * Roadmap
-this is where ill keep track of work that i've done on features that I'd like to have in the application
+This is where ill keep track of work that i've done on features that I'd like to have in the application
 ** [0/3] Crawling
 + [ ] Get all files and folders in working dir
 + [ ] Add them to a dict or list or class with relevant meta-data attached
