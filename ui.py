@@ -48,19 +48,19 @@ class UserInterface:
                     ls_dir(self.windows[self.focus], self.path[0],
                            self.sel[self.focus], self.pos[self.focus])
             if key == curses.KEY_DOWN:
-                if self.pos[self.focus] < self.windows[self.focus].h - 3:
+                if self.pos[self.focus] <= self.windows[self.focus].h - 3:
                     self.pos[self.focus] += 1
                     self.sel[self.focus] += 1
                     ls_dir(self.windows[self.focus], self.path[0],
                            self.sel[self.focus], self.pos[self.focus])
                 else:
-                    if self.sel[self.focus] < len(get_dir(self.path[0]))-1:
+                    if self.sel[self.focus] <= len(get_dir(self.path[0]))-1:
                         self.sel[self.focus] += 1
                         ls_dir(self.windows[self.focus], self.path[0],
                                self.sel[self.focus], self.pos[self.focus])
             if key == curses.KEY_LEFT and self.focus > 0:
                 self.focus -= 1
-            if key == curses.KEY_RIGHT and self.focus < 2:
+            if key == curses.KEY_RIGHT and self.focus < 1:
                 self.focus += 1
             if key == ord('q'):
                 exit()
