@@ -12,7 +12,7 @@
 # Introduction and Purpose
 
 The purpose of this application is create a console based file manager application which allows for the in-terminal navigation of a nix based machine. 
-The program features python code leveraging builtin packages like ncurses and os. The initial idea for this was inspired by applications like lfm so a huge thank you to the people who created them!
+The program features python code leveraging builtin packages like ncurses and os. The initial idea for this was inspired by applications like lfm and a desire to learn more about GUI/TUI programming.
 
 
 <a id="org06ac7a9"></a>
