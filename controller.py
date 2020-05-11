@@ -5,6 +5,12 @@ def debug(function, message):
     with open(debug_file, 'a') as f:
         f.write(f"Output from {function} : {message} \n")
 
+def name_fit(box_w, item_name):
+    if box_w <= len(item_name):
+        item_name = item_name[:box_w-6] + '...'
+        return item_name
+    return item_name
+
 def get_dir(path):
     return [('d', f) if os.path.isdir(f) else ('f', f) \
             for f in sorted(os.listdir(path), key=lambda x: x.lower())]
@@ -41,18 +47,19 @@ def ls_dir(box, path, sel, pos):
     clear_str = ' '*(w)
     scroll = scrolling(box, sel, items)
     for index, item in enumerate(items[scroll[0]:scroll[1]]):
+        item_name = name_fit(w, item[1])
         index += 1
         box.box.addstr(index, 2, clear_str)
         if index == pos and item[0] == 'd':
-            d_name = item[1] + '/'
+            d_name = item_name + '/'
             box.box.addstr(index, 2, d_name, curses.color_pair(1) | curses.A_BOLD)
         if index == pos and item[0] != 'd':
-            box.box.addstr(index, 2, item[1], curses.color_pair(1))
+            box.box.addstr(index, 2, item_name, curses.color_pair(1))
         if index != pos and item[0] == 'd':
             # we have to delete the slash we added when the dir was highlighted lol
-            box.box.addstr(index, 2, item[1]+' ', curses.A_NORMAL | curses.A_BOLD)
+            box.box.addstr(index, 2, item_name+' ', curses.A_NORMAL | curses.A_BOLD)
         if index != pos and item[0] != 'd':
-            box.box.addstr(index, 2, item[1], curses.A_NORMAL)
+            box.box.addstr(index, 2, item_name, curses.A_NORMAL)
     box.stdscr.refresh()
     box.box.refresh()
 
@@ -91,6 +98,7 @@ def info_box(box, path, sel):
     clear_str = ' '*int(w-2)
     file_info = {}
     item = get_dir(path)[sel-1]
+    debug('info_box', f"{path}, {sel}, {item}")
     file_info['file_name'] = item[1]
     try:
         file_info['file_size'] = str(os.path.getsize(item[1])/1000) + 'kb'

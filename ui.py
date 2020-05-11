@@ -6,10 +6,10 @@ from controller import name_box, ls_dir, get_dir, debug, info_box
 class UserInterface:
     def __init__(self, stdscr, path):
         self.stdscr = stdscr
-        self.path = [path, None, None]
+        self.path = [path, path]
         self.w = self.stdscr.getmaxyx()[1]
-        self.pos = [1, 1, 1]
-        self.sel = [1, 1, 1]
+        self.pos = [1, 1]
+        self.sel = [0, 0]
         self.focus = 0
         self.win1 = Box(self.stdscr, 1, 0)
         self.win2 = Box(self.stdscr, self.w//3 +1, 1)
@@ -32,46 +32,77 @@ class UserInterface:
         self.win3.draw()
 
     def get_key(self):
-        ls_dir(self.windows[self.focus], self.path[0],
+        ls_dir(self.windows[self.focus], self.path[self.focus],
                self.sel[self.focus], self.pos[self.focus])
-        name_box(self.windows[self.focus], self.path[0], self.focus)
-        info_box(self.windows[2], self.path[0], self.sel[self.focus])
+        name_box(self.windows[self.focus], self.path[self.focus], self.focus)
+        info_box(self.windows[2], self.path[self.focus], self.sel[self.focus])
         while 1:
             key = self.stdscr.getch()
             if key == curses.KEY_UP and self.pos[self.focus] > 1:
                 if self.pos[self.focus] == self.sel[self.focus]:
                     self.pos[self.focus] -= 1
                     self.sel[self.focus] -= 1
-                    ls_dir(self.windows[self.focus], self.path[0],
+                    ls_dir(self.windows[self.focus], self.path[self.focus],
                            self.sel[self.focus], self.pos[self.focus])
-                    info_box(self.windows[2], self.path[0], self.sel[self.focus])
+                    info_box(self.windows[2], self.path[self.focus], self.sel[self.focus])
                 else:
                     self.sel[self.focus] -= 1
-                    ls_dir(self.windows[self.focus], self.path[0],
+                    ls_dir(self.windows[self.focus], self.path[self.focus],
                            self.sel[self.focus], self.pos[self.focus])
-                    info_box(self.windows[2], self.path[0], self.sel[self.focus])
+                    info_box(self.windows[2], self.path[self.focus], self.sel[self.focus])
             if key == curses.KEY_DOWN:
                 if self.pos[self.focus] <= self.windows[self.focus].h - 3 \
-                   and self.sel[self.focus] <= len(get_dir(self.path[0]))-1:
+                   and self.sel[self.focus] <= len(get_dir(self.path[self.focus]))-1:
                     self.pos[self.focus] += 1
                     self.sel[self.focus] += 1
-                    ls_dir(self.windows[self.focus], self.path[0],
+                    ls_dir(self.windows[self.focus], self.path[self.focus],
                            self.sel[self.focus], self.pos[self.focus])
-                    info_box(self.windows[2], self.path[0], self.sel[self.focus])
+                    info_box(self.windows[2], self.path[self.focus], self.sel[self.focus])
                 else:
-                    if self.sel[self.focus] <= len(get_dir(self.path[0]))-1:
+                    if self.sel[self.focus] <= len(get_dir(self.path[self.focus]))-1:
                         self.sel[self.focus] += 1
-                        ls_dir(self.windows[self.focus], self.path[0],
+                        ls_dir(self.windows[self.focus], self.path[self.focus],
                                self.sel[self.focus], self.pos[self.focus])
-                        info_box(self.windows[2], self.path[0], self.sel[self.focus])
+                        info_box(self.windows[2], self.path[self.focus], self.sel[self.focus])
             if key == curses.KEY_LEFT and self.focus > 0:
                 self.focus -= 1
-            if key == curses.KEY_RIGHT and self.focus < 1:
-                self.focus += 1
+                os.chdir(self.path[self.focus])
+                info_box(self.windows[2], self.path[self.focus], self.sel[self.focus])
+            if key == curses.KEY_RIGHT:
+                if self.focus < 1:
+                    if get_dir(self.path[self.focus])[self.sel[self.focus]][0] == 'd':
+                        self.path[self.focus+1] = self.path[self.focus] + '/' +\
+                            get_dir(self.path[self.focus])[self.sel[self.focus]][1]
+                        self.focus += 1
+                        self.sel[self.focus] = 0
+                        self.pos[self.focus] = 1
+                        os.chdir(self.path[self.focus])
+                        self.windows[self.focus].box.clear()
+                        ls_dir(self.windows[self.focus], self.path[self.focus],
+                               self.sel[self.focus], self.pos[self.focus])
+                        info_box(self.windows[2], self.path[self.focus], self.sel[self.focus])
+                    elif get_dir(self.path[self.focus])[self.sel[self.focus]][0] == 'd':
+                        self.path[self.focus] = self.path[self.focus] + '/' +\
+                            get_dir(self.path[self.focus])[self.sel[self.focus]][1]
+                        self.sel[self.focus] = 0
+                        self.pos[self.focus] = 1
+                        os.chdir(self.path[self.focus])
+                        self.windows[self.focus].box.clear()
+                        ls_dir(self.windows[self.focus], self.path[self.focus],
+                               self.sel[self.focus], self.pos[self.focus])
+                else:
+                    debug('idk', f"{self.path[self.focus]}, {self.sel[self.focus]}")
+                    if get_dir(self.path[self.focus])[self.sel[self.focus]][0] == 'd':
+                        self.path[self.focus] = self.path[self.focus] + '/' + \
+                            get_dir(self.path[self.focus])[self.sel[self.focus]][1]
+                        os.chdir(self.path[self.focus])
+                        self.windows[self.focus].box.clear()
+                        self.sel[self.focus], self.pos[self.focus] = 1,1
+                        ls_dir(self.windows[self.focus], self.path[self.focus],
+                               self.sel[self.focus], self.pos[self.focus])
             if key == ord('q'):
                 exit()
-            for window in self.windows[:2]:
-                name_box(window, self.path[0], self.focus)
+            name_box(self.windows[self.focus], self.path[self.focus], self.focus)
 
     #event loop goes here
     def run(self):
