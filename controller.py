@@ -96,7 +96,10 @@ def info_box(box, path, sel):
         file_info['file_size'] = str(os.path.getsize(item[1])/1000) + 'kb'
     except os.error as error:
         file_info['file_size'] = error
-    file_info['file_type'] = os.path.splitext(item[1])[1]
+    if item[0] == 'd':
+        file_info['file_type'] = 'directory'
+    else:
+        file_info['file_type'] = os.path.splitext(item[1])[1]
     file_info['permissions'] = permission_string(item)
 
     for index, item in enumerate(file_info.values()):

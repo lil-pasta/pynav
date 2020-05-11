@@ -51,7 +51,8 @@ class UserInterface:
                            self.sel[self.focus], self.pos[self.focus])
                     info_box(self.windows[2], self.path[0], self.sel[self.focus])
             if key == curses.KEY_DOWN:
-                if self.pos[self.focus] <= self.windows[self.focus].h - 3:
+                if self.pos[self.focus] <= self.windows[self.focus].h - 3 \
+                   and self.sel[self.focus] <= len(get_dir(self.path[0]))-1:
                     self.pos[self.focus] += 1
                     self.sel[self.focus] += 1
                     ls_dir(self.windows[self.focus], self.path[0],
